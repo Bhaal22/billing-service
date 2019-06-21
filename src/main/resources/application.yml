@@ -1,0 +1,39 @@
+server:
+  port: 7080
+  servlet:
+    context-path: /mediation-service
+
+management:
+  metrics:
+  export:
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,info,metrics,threaddump
+
+
+logging:
+  path: /tmp/log/mediationservice
+
+zuoraBaseURL: https://rest.sandbox.eu.zuora.com
+zuoraClientId: 1c0c0db4-8979-4af1-aca1-a451dba22584
+zuoraSecretKey: vgRP+z8Du7p=ZRxWMaJP3DxHeDWCcXNQjLrwGbL
+
+zuora:
+  connection-params:
+    baseUrl: ${zuoraBaseURL}
+    clientId: ${zuoraClientId}
+    secretKey: ${zuoraSecretKey}
+    accessTokenURL: ${zuoraBaseURL}/oauth/token
+    authorizationURL: ${zuoraBaseURL}/oauth
+    tokenName: access_token
+    grantType: client_credentials
+  endpoints:
+    createCustomer: ${zuoraBaseURL}/v1/accounts
+    getCustomerSubscriptions: ${zuoraBaseURL}/v1/subscriptions/accounts
+    createOrder: ${zuoraBaseURL}/v1/orders
+    getProductCatalog: ${zuoraBaseURL}/v1/catalog/products
+    createUsage: ${zuoraBaseURL}/v1/object/usage
+    createBillingRun: ${zuoraBaseURL}/v1/object/bill-run
