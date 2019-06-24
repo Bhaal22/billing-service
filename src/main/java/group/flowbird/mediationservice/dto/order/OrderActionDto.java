@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import group.flowbird.mediationservice.dto.subscription.SubscriptionDto;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
@@ -19,6 +20,7 @@ public class OrderActionDto {
      * Unless the type of order action is RenewSubscription, you must use the corresponding field to provide information about the order action.
      * For example, if the type of order action is CreateSubscription, you must set the CreateSubscription field.
      */
+    @NotEmpty
     @JsonProperty("type")
     private String type;
 

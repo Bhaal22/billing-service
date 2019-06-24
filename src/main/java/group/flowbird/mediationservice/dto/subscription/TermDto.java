@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Data
@@ -37,6 +38,7 @@ public class TermDto {
      * If the value of this field is EVERGREEN, the first term does not have a predefined duration.
      * Possible Value: "TERMED" "EVERGREEN"
      */
+    @NotEmpty
     @JsonProperty("termType")
     private String termType;
 }

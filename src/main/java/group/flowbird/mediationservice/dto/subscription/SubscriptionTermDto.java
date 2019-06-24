@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -19,6 +20,7 @@ public class SubscriptionTermDto {
     /**
      * Information about the first term of the subscription.
      */
+    @NotNull
     @JsonProperty("initialTerm")
     private TermDto initialTerm;
 

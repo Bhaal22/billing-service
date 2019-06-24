@@ -1,7 +1,6 @@
 package group.flowbird.mediationservice.client;
 
 import group.flowbird.mediationservice.dto.ErrorDetailsDto;
-import group.flowbird.mediationservice.dto.customer.CreateCustomerResponseDto;
 import group.flowbird.mediationservice.util.ZuoraResponseParser;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Optional;
 
 @Slf4j
 @Setter
@@ -20,19 +17,18 @@ public class ZuoraClient {
 
     String endpoint;
     HttpMethod requestMethod;
-    Optional<HttpEntity<?>> payload;
-    Optional<HttpStatus> expectedResponseCode;
-    Optional<Class<?>> responseClassType;
+    HttpEntity<?> payload;
+    HttpStatus expectedResponseCode;
+    Class<?> responseClassType;
 
-    private ZuoraClient(){
+    private ZuoraClient() {
         //almost empty!
     }
 
     public ResponseEntity<?> performRequest() throws Exception {
 
         ResponseEntity<String> zuoraResponse = restClient.performRequest(
-
-                payload.orElse(null),
+                payload,
                 requestMethod,
                 endpoint
         );
@@ -43,13 +39,13 @@ public class ZuoraClient {
     private ResponseEntity<?> parseResponse(ResponseEntity<String> response) throws Exception {
 
         ZuoraResponseParser parser = new ZuoraResponseParser()
-                .parseResponse(response, expectedResponseCode.orElse(HttpStatus.OK));
+                .parseResponse(response, expectedResponseCode);
 
         if (parser.isExpectedResponseCode()) {
 
             return new ResponseEntity<>(
-                    parser.getResponseBody(responseClassType.orElse(String.class)),
-                    HttpStatus.CREATED
+                    parser.getResponseBody(responseClassType),
+                    expectedResponseCode
             );
         }
 
@@ -66,16 +62,16 @@ public class ZuoraClient {
 
         String endpoint;
         HttpMethod requestMethod;
-        Optional<HttpEntity<?>> payload;
-        Optional<HttpStatus> expectedResponseCode;
-        Optional<Class<?>> responseClassType;
+        HttpEntity<?> payload;
+        HttpStatus expectedResponseCode;
+        Class<?> responseClassType;
 
         public ZuoraClientBuilder(RestClient restClient) {
 
             this.restClient = restClient;
-            payload = Optional.empty();
-            expectedResponseCode = Optional.empty();
-            responseClassType = Optional.empty();
+            payload = null;
+            expectedResponseCode = HttpStatus.OK;
+            responseClassType = String.class;
         }
 
         public ZuoraClientBuilder setEndpoint(String endpoint) {
@@ -89,17 +85,17 @@ public class ZuoraClient {
         }
 
         public <T> ZuoraClientBuilder setPayload(T payload) {
-            this.payload = Optional.of( new HttpEntity<>(payload) );
+            this.payload = new HttpEntity<>(payload);
             return this;
         }
 
         public ZuoraClientBuilder setExpectedResponseCode(HttpStatus expectedResponseCode) {
-            this.expectedResponseCode = Optional.of( expectedResponseCode );
+            this.expectedResponseCode = expectedResponseCode;
             return this;
         }
 
         public ZuoraClientBuilder setResponseClassType(Class<?> responseClassType) {
-            this.responseClassType = Optional.of(responseClassType);
+            this.responseClassType = responseClassType;
             return this;
         }
 

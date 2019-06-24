@@ -30,6 +30,13 @@ public class MediationService {
     @Autowired
     private RestClient restClient;
 
+    /**
+     * Makes create account API call to zuora and parse the response
+     * @param customer
+     * @return ResponseEntity with {@link CreateCustomerResponseDto} If successful,
+     * or {@link group.flowbird.mediationservice.dto.ErrorDetailsDto} If failed
+     * @throws Exception
+     */
     public ResponseEntity<?> createCustomerInZuora(CustomerDto customer) throws Exception {
 
         ZuoraClient client = new ZuoraClient.ZuoraClientBuilder(restClient)
@@ -39,6 +46,8 @@ public class MediationService {
                 .setExpectedResponseCode(HttpStatus.OK)
                 .setResponseClassType(CreateCustomerResponseDto.class)
                 .build();
+
+        log.info("Sending create account request to Zuora, CustomerID: " + customer.getCustomerID());
 
         return client.performRequest();
     }
@@ -52,6 +61,8 @@ public class MediationService {
                 .setExpectedResponseCode(HttpStatus.OK)
                 .setResponseClassType(CreateSubscriptionResponseDto.class)
                 .build();
+
+        log.info("Sending create order request to Zuora, AccountNumber: " + order.getExistingAccountNumber());
 
         return client.performRequest();
     }
