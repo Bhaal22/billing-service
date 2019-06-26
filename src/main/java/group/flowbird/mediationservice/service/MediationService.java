@@ -10,6 +10,8 @@ import group.flowbird.mediationservice.dto.order.OrderDto;
 import group.flowbird.mediationservice.dto.order.OrderSubscriptionDto;
 import group.flowbird.mediationservice.dto.order.TriggerDateDto;
 import group.flowbird.mediationservice.dto.subscription.*;
+import group.flowbird.mediationservice.dto.transaction.CreateTransactionResponseDto;
+import group.flowbird.mediationservice.dto.transaction.TransactionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -48,6 +50,28 @@ public class MediationService {
                 .build();
 
         log.info("Sending create account request to Zuora, CustomerID: " + customer.getCustomerID());
+
+        return client.performRequest();
+    }
+
+    /**
+     * Makes create account API call to zuora and parse the response
+     * @param transaction
+     * @return ResponseEntity with {@link TransactionDto} If successful,
+     * or {@link group.flowbird.mediationservice.dto.ErrorDetailsDto} If failed
+     * @throws Exception
+     */
+    public ResponseEntity<?> createTransactionInZuora(TransactionDto transaction) throws Exception {
+
+        ZuoraClient client = new ZuoraClient.ZuoraClientBuilder(restClient)
+                .setRequestMethod(HttpMethod.POST)
+                .setEndpoint(zuoraEndpoints.getCreateUsage())
+                .setPayload(transaction)
+                .setExpectedResponseCode(HttpStatus.OK)
+                .setResponseClassType(CreateTransactionResponseDto.class)
+                .build();
+
+        log.info("Sending create account request to Zuora, CustomerID: " + transaction.getAccountId() + ", ChargeID: " +transaction.getChargeId());
 
         return client.performRequest();
     }
