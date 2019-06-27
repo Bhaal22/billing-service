@@ -47,7 +47,7 @@ public class MediationService {
                 .setResponseClassType(CreateCustomerResponseDto.class)
                 .build();
 
-        log.info("Sending create account request to Zuora, CustomerID: " + customer.getCustomerID());
+        log.info(String.format("Sending create account request to Zuora, CustomerID: ", customer.getCustomerID()));
 
         return client.performRequest();
     }

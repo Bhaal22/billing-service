@@ -28,8 +28,6 @@ import group.flowbird.mediationservice.*;
 @Api(value = "Application Information")
 public class ApplicationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
-
     @RequestMapping(method={RequestMethod.GET},value={"/version"})
     public String getVersion() {
         return Application.getVersion();
