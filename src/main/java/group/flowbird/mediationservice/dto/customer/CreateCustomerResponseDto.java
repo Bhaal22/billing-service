@@ -1,13 +1,11 @@
 package group.flowbird.mediationservice.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import group.flowbird.mediationservice.dto.BaseResponseDto;
 import lombok.Data;
 
 @Data
-public class CreateCustomerResponseDto {
-
-    @JsonProperty("Success")
-    private boolean isSuccess;
+public class CreateCustomerResponseDto extends BaseResponseDto {
 
     @JsonProperty("accountId")
     private String accountId;

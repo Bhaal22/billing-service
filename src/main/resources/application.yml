@@ -32,6 +32,8 @@ zuora:
     grantType: client_credentials
   endpoints:
     createCustomer: ${zuoraBaseURL}/v1/accounts
+    updateCustomer: ${zuoraBaseURL}/v1/accounts
+    getCustomer: ${zuoraBaseURL}/v1/accounts
     getCustomerSubscriptions: ${zuoraBaseURL}/v1/subscriptions/accounts
     createOrder: ${zuoraBaseURL}/v1/orders
     getProductCatalog: ${zuoraBaseURL}/v1/catalog/products

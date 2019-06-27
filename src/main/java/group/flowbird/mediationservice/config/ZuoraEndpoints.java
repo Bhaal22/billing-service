@@ -6,6 +6,8 @@ import lombok.Data;
 public class ZuoraEndpoints {
 
     private String createCustomer;
+    private String updateCustomer;
+    private String getCustomer;
     private String getCustomerSubscriptions;
     private String createOrder;
     private String getProductCatalog;

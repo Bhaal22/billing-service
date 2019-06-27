@@ -1,6 +1,7 @@
 package group.flowbird.mediationservice.client;
 
 import group.flowbird.mediationservice.dto.ErrorDetailsDto;
+import group.flowbird.mediationservice.dto.ErrorResponseDto;
 import group.flowbird.mediationservice.util.ZuoraResponseParser;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,11 @@ public class ZuoraClient {
         //almost empty!
     }
 
+    /**
+     * Performs a request to the already set @endpoint and parse the response received from zuora
+     * @return ResponseEntity with @responseClassType if Successful or @{@link ErrorDetailsDto} if failed.
+     * @throws Exception, in case of 4xx response HttpClientErrorException is thrown and in case of 5xx response HttpServerErrorException
+     */
     public ResponseEntity<?> performRequest() throws Exception {
 
         ResponseEntity<String> zuoraResponse = restClient.performRequest(
@@ -41,7 +47,7 @@ public class ZuoraClient {
         ZuoraResponseParser parser = new ZuoraResponseParser()
                 .parseResponse(response, expectedResponseCode);
 
-        if (parser.isExpectedResponseCode()) {
+        if (parser.isSuccessfulRequest()) {
 
             return new ResponseEntity<>(
                     parser.getResponseBody(responseClassType),
@@ -49,10 +55,10 @@ public class ZuoraClient {
             );
         }
 
-        ErrorDetailsDto errorDetails = parser.getResponseBody(ErrorDetailsDto.class);
+        ErrorResponseDto errorDetails = parser.getResponseBody(ErrorResponseDto.class);
         return new ResponseEntity<>(
                 errorDetails,
-                HttpStatus.valueOf(errorDetails.getCode())
+                HttpStatus.OK
         );
     }
 
