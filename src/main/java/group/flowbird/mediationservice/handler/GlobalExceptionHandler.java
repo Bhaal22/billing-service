@@ -55,18 +55,4 @@ public class GlobalExceptionHandler {
                 map.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR)
         );
     }
-
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<String> handleException(HttpClientErrorException ex, WebRequest request) {
-        Optional<String> response = Optional.of( ex.getResponseBodyAsString() );
-        String errorDescriptionNotFound = "No Error description returned!";
-        log.error("Received error response from zuora for: "
-                + request.getDescription(false)
-                + "\nError message: "
-                + response.orElse(errorDescriptionNotFound));
-        return new ResponseEntity<>(
-                response.orElse(errorDescriptionNotFound),
-                map.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR)
-        );
-    }
 }
