@@ -1,7 +1,6 @@
 package group.flowbird.mediationservice.util;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import group.flowbird.mediationservice.dto.BaseResponseDto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,25 +8,37 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
+import static group.flowbird.mediationservice.util.RestUtils.mapObjectFromString;
+
 @Slf4j
 public class ZuoraResponseParser {
 
     @Getter
-    private boolean isExpectedResponseCode = false;
+    private boolean isSuccessfulRequest = false;
 
     private Optional<ResponseEntity<String>> response = Optional.empty();
 
-    public ZuoraResponseParser parseResponse(ResponseEntity<String> response, HttpStatus expectedResponseCode) {
+    public ZuoraResponseParser parseResponse(ResponseEntity<String> response, HttpStatus expectedResponseCode) throws Exception {
 
         this.response = Optional.of(response);
         return parseResponse(expectedResponseCode);
     }
 
-    private ZuoraResponseParser parseResponse(HttpStatus expectedResponseCode) {
+    private ZuoraResponseParser parseResponse(HttpStatus expectedResponseCode) throws Exception {
 
-        isExpectedResponseCode = response.map(ResponseEntity::getStatusCode)
+        isSuccessfulRequest = response.map(ResponseEntity::getStatusCode)
                 .orElse(HttpStatus.SERVICE_UNAVAILABLE)
                 .equals(expectedResponseCode);
+
+        Optional<BaseResponseDto> baseResponse = Optional.of( mapObjectFromString(
+
+                response.map(ResponseEntity::getBody)
+                        .orElse(""),
+                BaseResponseDto.class
+        ));
+
+        isSuccessfulRequest &= baseResponse.map(BaseResponseDto::getSuccess)
+                .orElse(false);
 
         return this;
     }
@@ -40,16 +51,5 @@ public class ZuoraResponseParser {
                         .orElse(""),
                 classType
         );
-    }
-
-    private <T> T mapObjectFromString(String responseString, Class<T> classType) throws Exception {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        if(classType.equals(String.class)) {
-            return (T) responseString;
-        }
-        return (T) objectMapper.readValue(responseString, classType);
     }
 }

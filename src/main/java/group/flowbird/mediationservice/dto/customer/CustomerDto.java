@@ -2,10 +2,14 @@ package group.flowbird.mediationservice.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import group.flowbird.mediationservice.validation.ValidationGroup.NullOrNotBlank;
+import group.flowbird.mediationservice.validation.ValidationGroup.Create;
+import group.flowbird.mediationservice.validation.ValidationGroup.Update;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -14,7 +18,8 @@ public class CustomerDto {
     /**
      * Unique identifier of a customer in MPP
      */
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
+    @Null(groups = Update.class)
     @JsonProperty("customerID__c")
     private String customerID;
 
@@ -38,20 +43,23 @@ public class CustomerDto {
      * The account's bill cycle day (BCD), when bill runs generate invoices for the account.
      * Specify any day of the month (1-31, where 31 = end-of-month), or 0 for auto-set.
      */
+    @Null(groups = Update.class)
     @JsonProperty("billCycleDay")
     private Long billCycleDay;
 
     /**
      * One of the currency that is defined in Billing Settings in the Zuora UI.
      */
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
+    @Null(groups = Update.class)
     @JsonProperty("currency")
     private String currency;
 
     /**
      * Account name, up to 255 characters.
      */
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
+    @NullOrNotBlank(groups = Update.class)
     @JsonProperty("name")
     private String name;
 
@@ -59,6 +67,7 @@ public class CustomerDto {
      * Payment terms for this account.
      * Possible values are: Due Upon Receipt, Net 30, Net 60, Net 90.
      */
+    @Null(groups = Update.class)
     @JsonProperty("paymentTerm")
     private String paymentTerm;
 
@@ -87,7 +96,7 @@ public class CustomerDto {
      * If you do not provide a sold-to contact, the bill-to contact is copied to sold-to contact.
      * Once the sold-to contact is created, changes to billToContact will not affect soldToContact and vice versa.
      */
-    @NotNull
+    @NotNull(groups = Create.class)
     @JsonProperty("billToContact")
     private ContactDto billToContact;
 }

@@ -1,6 +1,9 @@
 package group.flowbird.mediationservice.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import group.flowbird.mediationservice.validation.ValidationGroup.NullOrNotBlank;
+import group.flowbird.mediationservice.validation.ValidationGroup.Create;
+import group.flowbird.mediationservice.validation.ValidationGroup.Update;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -30,14 +33,16 @@ public class ContactDto {
     /**
      * First name, 100 characters or less.
      */
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
+    @NullOrNotBlank(groups = Update.class)
     @JsonProperty("firstName")
     private String firstName;
 
     /**
      * Last name, 100 characters or less.
      */
-    @NotEmpty
+    @NotEmpty(groups = Create.class)
+    @NullOrNotBlank(groups = Update.class)
     @JsonProperty("lastName")
     private String lastName;
 

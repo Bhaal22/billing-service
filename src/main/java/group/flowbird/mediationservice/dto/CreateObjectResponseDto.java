@@ -2,13 +2,12 @@ package group.flowbird.mediationservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ZuoraCreateObjectResponseDto {
-
-    @JsonProperty("Success")
-    private boolean isSuccess;
+@EqualsAndHashCode(callSuper=true)
+public class CreateObjectResponseDto extends BaseResponseDto {
 
     @JsonProperty("Id")
-    private String accountId;
+    private String id;
 }

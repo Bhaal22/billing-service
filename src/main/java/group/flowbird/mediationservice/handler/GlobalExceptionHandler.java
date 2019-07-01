@@ -1,6 +1,10 @@
 package group.flowbird.mediationservice.handler;
 
 import group.flowbird.mediationservice.dto.ErrorDetailsDto;
+import group.flowbird.mediationservice.dto.ErrorDetailsDto.ErrorDetailsBuilder;
+import group.flowbird.mediationservice.dto.ErrorResponseDto;
+import group.flowbird.mediationservice.dto.ErrorResponseDto.ErrorResponseBuilder;
+import group.flowbird.mediationservice.util.RestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +39,7 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(
 
-                new ErrorDetailsDto.ErrorDetailsBuilder()
+                new ErrorDetailsBuilder()
                         .setMessage(ex.getMessage())
                         .build(),
                 map.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,10 +53,46 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(
 
-                new ErrorDetailsDto.ErrorDetailsBuilder()
+                new ErrorDetailsBuilder()
                         .setMessage(ex.getMessage())
                         .build(),
                 map.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR)
         );
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(HttpClientErrorException ex, WebRequest request) {
+
+        Optional<String> responseText = Optional.of( ex.getResponseBodyAsString() );
+        log.error("Received error response from zuora for: "
+                + request.getDescription(false)
+                + "\nError message: "
+                + responseText.orElse("No Error or Unknown error description returned by zuora!"));
+
+        ErrorResponseDto response = responseText.map(val -> {
+            try {
+                return RestUtils.mapObjectFromString(val, ErrorResponseDto.class);
+            } catch (Exception e) {
+                return buildUnknownErrorDescription(val);
+            }
+        }).orElse( buildUnknownErrorDescription("No Error or Unknown error description returned by zuora!") );
+
+        return new ResponseEntity<>(
+
+                response,
+                map.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR)
+        );
+    }
+
+    private ErrorResponseDto buildUnknownErrorDescription(String description) {
+
+        ErrorDetailsDto errorDetails = new ErrorDetailsBuilder()
+                .setCode("No Error Code")
+                .setMessage(description)
+                .build();
+
+        return new ErrorResponseBuilder()
+                .addError(errorDetails)
+                .build();
     }
 }

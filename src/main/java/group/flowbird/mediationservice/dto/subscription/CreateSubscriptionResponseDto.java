@@ -1,13 +1,13 @@
 package group.flowbird.mediationservice.dto.subscription;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import group.flowbird.mediationservice.dto.BaseResponseDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class CreateSubscriptionResponseDto {
-
-    @JsonProperty("success")
-    private boolean success;
+@EqualsAndHashCode(callSuper=true)
+public class CreateSubscriptionResponseDto extends BaseResponseDto {
 
     /**
      * Generated subscription ID from Zuora

@@ -2,7 +2,9 @@ package group.flowbird.mediationservice.service;
 
 import group.flowbird.mediationservice.client.RestClient;
 import group.flowbird.mediationservice.client.ZuoraClient;
+import group.flowbird.mediationservice.client.ZuoraClient.ZuoraClientBuilder;
 import group.flowbird.mediationservice.config.ZuoraEndpoints;
+import group.flowbird.mediationservice.dto.BaseResponseDto;
 import group.flowbird.mediationservice.dto.customer.CreateCustomerResponseDto;
 import group.flowbird.mediationservice.dto.customer.CustomerDto;
 import group.flowbird.mediationservice.dto.order.OrderActionDto;
@@ -39,9 +41,9 @@ public class MediationService {
      * or {@link group.flowbird.mediationservice.dto.ErrorDetailsDto} If failed
      * @throws Exception
      */
-    public ResponseEntity<?> createCustomerInZuora(CustomerDto customer) throws Exception {
+    public ResponseEntity<?> createCustomer(CustomerDto customer) throws Exception {
 
-        ZuoraClient client = new ZuoraClient.ZuoraClientBuilder(restClient)
+        ZuoraClient client = new ZuoraClientBuilder(restClient)
                 .setRequestMethod(HttpMethod.POST)
                 .setEndpoint(zuoraEndpoints.getCreateCustomer())
                 .setPayload(customer)
@@ -49,7 +51,20 @@ public class MediationService {
                 .setResponseClassType(CreateCustomerResponseDto.class)
                 .build();
 
-        log.info("Sending create account request to Zuora, CustomerID: " + customer.getCustomerID());
+        log.info(String.format("Sending create account request to Zuora, CustomerID: ", customer.getCustomerID()));
+
+        return client.performRequest();
+    }
+
+    public ResponseEntity<?> updateCustomer(String customerID, CustomerDto customer) throws Exception {
+
+        ZuoraClient client = new ZuoraClientBuilder(restClient)
+                .setRequestMethod(HttpMethod.PUT)
+                .setEndpoint(zuoraEndpoints.getUpdateCustomer() + "/" + customerID)
+                .setPayload(customer)
+                .setExpectedResponseCode(HttpStatus.OK)
+                .setResponseClassType(BaseResponseDto.class)
+                .build();
 
         return client.performRequest();
     }
@@ -78,7 +93,7 @@ public class MediationService {
 
     public ResponseEntity<?> createOrder(OrderDto order) throws Exception {
 
-        ZuoraClient client = new ZuoraClient.ZuoraClientBuilder(restClient)
+        ZuoraClient client = new ZuoraClientBuilder(restClient)
                 .setRequestMethod(HttpMethod.POST)
                 .setEndpoint(zuoraEndpoints.getCreateOrder())
                 .setPayload(order)
