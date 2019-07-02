@@ -71,7 +71,7 @@ public class MediationService {
 
     /**
      * Makes create account API call to zuora and parse the response
-     * @param transaction
+     * @param @{@link TransactionDto}
      * @return ResponseEntity with {@link TransactionDto} If successful,
      * or {@link group.flowbird.mediationservice.dto.ErrorDetailsDto} If failed
      * @throws Exception

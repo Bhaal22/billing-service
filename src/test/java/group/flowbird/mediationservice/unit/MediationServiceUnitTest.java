@@ -80,7 +80,6 @@ public class MediationServiceUnitTest {
             transactionDto.setAccountId(ACCOUNT_ID);
             transactionDto.setChargeId(CHARGE_ID);
             transactionDto.setSubscriptionId(SUBSCRIPTION_ID);
-            transactionDto.setDescription("this is desc");
             transactionDto.setEndDateTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse("2016-11-20T04:41:36.000+01:00"));
             transactionDto.setQuantity(9.9);
             transactionDto.setStartDateTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse("2016-10-20T05:41:36.000+02:00"));
