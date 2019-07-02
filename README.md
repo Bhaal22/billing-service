@@ -25,13 +25,15 @@ This software is licensed under the [BSD License][BSD]. For more information, re
 There are two logs created, Application.log and request.log.
 1. Application.log logs during the startup.
 2. The request.log will log a specific log that manually added in application which is filtered by package level.
+3. The logs are located on /tmp/log/mediationservice in which the application deployed. This location is configured on application.yml file under logging.path. 
 
 ## URL's
 Swagger Overview
 http://localhost:7080/mediation-service/swagger-ui.html#
 
-Postman BaseURL
+## Postman BaseURL
 http://localhost:7080/mediation-service/rest/v1/
 
-
+## Application version
+http://localhost:7080/mediation-service/version
 
