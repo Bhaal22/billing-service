@@ -38,7 +38,12 @@ public class CustomerResource {
 
         if (response.getBody() instanceof CreateCustomerResponseDto) {
             mediationService.createOrder(
-                    ((CreateCustomerResponseDto) response.getBody()).getAccountNumber()
+                    ((CreateCustomerResponseDto) response.getBody()).getAccountNumber(),
+                    "8adc8f996ade4a0c016ade83b7d20559"
+            );
+            mediationService.createOrder(
+                    ((CreateCustomerResponseDto) response.getBody()).getAccountNumber(),
+                    "8adc8f996af78a57016af8796ccd0d5b"
             );
         }
         return response;

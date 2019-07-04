@@ -106,12 +106,12 @@ public class MediationService {
         return client.performRequest();
     }
 
-    public ResponseEntity<?> createOrder(String accountKey) throws Exception {
+    public ResponseEntity<?> createOrder(String accountKey, String productRatePlanId) throws Exception {
 
-        return createOrder( createOrderObjectWithBasicSubscription(accountKey) );
+        return createOrder( createOrderObjectWithBasicSubscription(accountKey, productRatePlanId) );
     }
 
-    private OrderDto createOrderObjectWithBasicSubscription(String accountKey) {
+    private OrderDto createOrderObjectWithBasicSubscription(String accountKey, String productRatePlanId) {
 
         OrderDto order = new OrderDto();
         order.setExistingAccountNumber(accountKey);
@@ -143,7 +143,7 @@ public class MediationService {
         subscription.setTerms(subscriptionTerm);
 
         //subscriptionRatePlan
-        subscriptionRatePlan.setProductRatePlanId("8adc8f996ade4a0c016ade83b7d20559");
+        subscriptionRatePlan.setProductRatePlanId(productRatePlanId);
 
         //subscriptionTerm
         subscriptionTerm.setAutoRenew(false);
