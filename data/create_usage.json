@@ -1,0 +1,16 @@
+{
+    "AccountId": "8adc9dee6daaa504016daf4efa8e30ae",
+    "SubscriptionId": "8adc8f996daaa50e016daf51df85610b",
+    "ChargeId": "8adc8f996daaa50e016daf51dfa16110",
+    "Description": "Parking Fee",
+    "Quantity": 6.66,
+    "StartDateTime": "2019-10-09T09:00:00.000+01:00",
+    "EndDateTime": "2019-10-09T09:50:00.000+01:00",
+    "U_Duration__c": "50:00",
+    "U_TransactionId__c": "jm123",
+    "U_Location__c": "Amsterdam",
+    "U_LicensePlate__c": "AA-BB-CC",
+    "UOM": "ParkingFee"
+  }
+  
+  
